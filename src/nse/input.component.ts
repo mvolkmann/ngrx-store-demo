@@ -25,7 +25,7 @@ import {HasChangeDetector, StateService} from './state.service';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class InputComponent extends HasChangeDetector implements OnInit {
+export class InputComponent<S> extends HasChangeDetector implements OnInit {
   @Input() autofocus: boolean;
   @Input() path: string;
   @Input() type = 'text';
@@ -34,7 +34,7 @@ export class InputComponent extends HasChangeDetector implements OnInit {
   @Output() enter = new EventEmitter();
   @Output() value = '';
 
-  constructor(cd: ChangeDetectorRef, private stateSvc: StateService) {
+  constructor(cd: ChangeDetectorRef, private stateSvc: StateService<S>) {
     super(cd);
   }
 

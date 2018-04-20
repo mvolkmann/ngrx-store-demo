@@ -38,12 +38,15 @@ export interface TextPath {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CheckboxesComponent implements OnInit {
+export class CheckboxesComponent<S> implements OnInit {
   @Input() className = '';
   @Input() list: TextPath[];
   @Input() values = [];
 
-  constructor(private cd: ChangeDetectorRef, private stateSvc: StateService) {}
+  constructor(
+    private cd: ChangeDetectorRef,
+    private stateSvc: StateService<S>
+  ) {}
 
   ngOnInit() {
     this.list.forEach((obj, index) =>

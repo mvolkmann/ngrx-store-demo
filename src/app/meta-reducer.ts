@@ -1,7 +1,7 @@
 import {carReducer} from './car-reducer';
 import {initialState} from './state';
 import {userReducer} from './user-reducer';
-import {reducer as stateSvcReducer} from '../nse/state.service';
+import {getReducer} from '../nse/state.service';
 
 const reducerMap = {
   car: carReducer,
@@ -10,12 +10,13 @@ const reducerMap = {
 
 export function metaReducer(reducer) {
   return (state = initialState, action) => {
+    const stateSvcReducer = getReducer();
     let newState = stateSvcReducer(state, action);
     if (newState === null) {
       newState = {...state};
-      Object.keys(reducerMap).forEach(key => {
-        const reducer = reducerMap[key];
-        const newValue = reducer(newState[key], action);
+      Object.keys(reducerMap).forEach((key: string) => {
+        const theReducer = reducerMap[key];
+        const newValue = theReducer(newState[key], action);
         newState[key] = newValue;
       });
     }

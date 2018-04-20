@@ -11,10 +11,10 @@
     "callable-types": true,
     "class-name": true,
     "comment-format": [
-      true,
+      false,
       "check-space"
     ],
-    "curly": true,
+    "curly": false,
     "deprecation": {
       "severity": "warn"
     },
@@ -130,7 +130,7 @@
     "component-selector": [
       true,
       "element",
-      "app",
+      ["app", "nse"],
       "kebab-case"
     ],
     "no-output-on-prefix": true,

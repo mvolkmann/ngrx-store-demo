@@ -13,7 +13,10 @@ export class AppComponent {
   car$ = null;
   user$ = null;
 
-  constructor(private stateSvc: StateService, private store: Store<AppState>) {
+  constructor(
+    private stateSvc: StateService<AppState>,
+    private store: Store<AppState>
+  ) {
     this.car$ = store.select('car');
     this.user$ = store.select('user');
   }

@@ -32,12 +32,12 @@ export interface TextValue {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SelectComponent extends HasChangeDetector implements OnInit {
+export class SelectComponent<S> extends HasChangeDetector implements OnInit {
   @Input() list: TextValue[];
   @Input() path: string;
   @Output() value = '';
 
-  constructor(cd: ChangeDetectorRef, private stateSvc: StateService) {
+  constructor(cd: ChangeDetectorRef, private stateSvc: StateService<S>) {
     super(cd);
   }
 

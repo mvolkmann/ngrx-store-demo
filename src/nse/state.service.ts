@@ -4,11 +4,12 @@ import {throttle} from 'lodash/function';
 import {Observable} from 'rxjs/Observable';
 import {Subscription} from 'rxjs/Subscription';
 
+import {AppState} from '../app/state';
+
 interface Action {
   type: string;
   payload?: any;
 }
-type StateType = Object;
 
 const DELETE = '@@delete';
 const FILTER = '@@filter';
@@ -32,8 +33,6 @@ const reducers = {
   [SET]: setPath,
   [TRANSFORM]: transformPath
 };
-
-let initialState = {};
 
 export class CaptureType<T> {
   constructor(value: T) {}
@@ -60,11 +59,11 @@ export class HasChangeDetector {
   }
 }
 
-export type ReducerFn = (state: StateType, payload?: any) => StateType;
+export type ReducerFn<S> = (state: S, payload?: any) => S;
 
 // ng-packagr doesn't allow use of an anonymous function here.
 //const metaReducers = [() => reducer];
-export function getReducer(): ReducerFn {
+export function getReducer<S>(): ReducerFn<S> {
   return reducer;
 }
 export const metaReducers = [getReducer];
@@ -87,11 +86,13 @@ function deepFreeze(obj: Object, freezing: Object[] = []): void {
   Object.freeze(obj);
 }
 
-function deletePath(state: StateType, payload: any): StateType {
+function deletePath<S extends Object>(state: S, payload: any): S {
   const path = payload;
   const parts = path.split(PATH_DELIMITER);
   const lastPart = parts.pop();
-  const newState = {...state};
+  // We can't use object spread here due to
+  // https://github.com/Microsoft/TypeScript/pull/13288.
+  const newState = Object.assign({}, state);
 
   let obj = newState;
   for (const part of parts) {
@@ -106,11 +107,13 @@ function deletePath(state: StateType, payload: any): StateType {
   return newState;
 }
 
-function filterPath(state: StateType, payload: any): StateType {
+function filterPath<S extends Object>(state: S, payload: any): S {
   const {path, value} = payload;
   const parts = path.split(PATH_DELIMITER);
   const lastPart = parts.pop();
-  const newState = {...state};
+  // We can't use object spread here due to
+  // https://github.com/Microsoft/TypeScript/pull/13288.
+  const newState = Object.assign({}, state);
 
   let obj = newState;
   for (const part of parts) {
@@ -137,7 +140,7 @@ function handleError(message: string): void {
   //throw new Error(err);
 }
 
-function initState(state: StateType, payload: StateType): StateType {
+function initState<S>(state: S, payload: S): S {
   return payload;
 }
 
@@ -145,23 +148,13 @@ function initState(state: StateType, payload: StateType): StateType {
  * This is called on app startup and
  * again each time the browser window is refreshed.
  */
-export function loadState(): StateType {
-  const {sessionStorage} = window; // not available in tests
-
-  try {
-    const json = sessionStorage ? sessionStorage.getItem(STATE_KEY) : null;
-    return json ? JSON.parse(json) : initialState;
-  } catch (e) {
-    handleError(e.message);
-    return initialState;
-  }
-}
-
-function mapPath(state: StateType, payload: any): StateType {
+function mapPath<S>(state: S, payload: any): S {
   const {path, value} = payload;
   const parts = path.split(PATH_DELIMITER);
   const lastPart = parts.pop();
-  const newState = {...state};
+  // We can't use object spread here due to
+  // https://github.com/Microsoft/TypeScript/pull/13288.
+  const newState = Object.assign({}, state);
 
   let obj = newState;
   for (const part of parts) {
@@ -184,11 +177,13 @@ function mapPath(state: StateType, payload: any): StateType {
   return newState;
 }
 
-function pushPath(state: StateType, payload: any): StateType {
+function pushPath<S>(state: S, payload: any): S {
   const {path, value} = payload;
   const parts = path.split(PATH_DELIMITER);
   const lastPart = parts.pop();
-  const newState = {...state};
+  // We can't use object spread here due to
+  // https://github.com/Microsoft/TypeScript/pull/13288.
+  const newState = Object.assign({}, state);
 
   let obj = newState;
   for (const part of parts) {
@@ -206,10 +201,7 @@ function pushPath(state: StateType, payload: any): StateType {
   return newState;
 }
 
-export function reducer(
-  state: StateType = initialState,
-  action: Action
-): StateType {
+function reducer<S>(state: S, action: Action): S {
   let {type} = action;
   if (!type) {
     handleError('action object passed to reducer must have type property');
@@ -240,7 +232,7 @@ export function reducer(
   return newState;
 }
 
-function saveState(state: StateType): void {
+function saveState<S>(state: S): void {
   try {
     const json = JSON.stringify(state);
     sessionStorage.setItem(STATE_KEY, json);
@@ -249,11 +241,13 @@ function saveState(state: StateType): void {
   }
 }
 
-function setPath(state: StateType, payload: any): StateType {
+function setPath<S>(state: S, payload: any): S {
   const {path, value} = payload;
   const parts = path.split(PATH_DELIMITER);
   const lastPart = parts.pop();
-  const newState = {...state};
+  // We can't use object spread here due to
+  // https://github.com/Microsoft/TypeScript/pull/13288.
+  const newState = Object.assign({}, state);
 
   let obj = newState;
   for (const part of parts) {
@@ -268,11 +262,13 @@ function setPath(state: StateType, payload: any): StateType {
   return newState;
 }
 
-function transformPath(state: StateType, payload: any): StateType {
+function transformPath<S>(state: S, payload: any): S {
   const {path, value} = payload;
   const parts = path.split(PATH_DELIMITER);
   const lastPart = parts.pop();
-  const newState = {...state};
+  // We can't use object spread here due to
+  // https://github.com/Microsoft/TypeScript/pull/13288.
+  const newState = Object.assign({}, state);
 
   let obj = newState;
   for (const part of parts) {
@@ -290,19 +286,16 @@ function transformPath(state: StateType, payload: any): StateType {
 }
 
 @Injectable()
-export class StateService {
-  initialState: Object = {};
+export class StateService<S extends Object> {
+  initialState: S;
 
-  constructor(
-    private state: State<StateType>,
-    private store: Store<StateType>
-  ) {
+  constructor(private state: State<S>, private store: Store<S>) {
     this.store.subscribe(
       throttle(() => saveState(this.getState()), 1000, {leading: false})
     );
   }
 
-  addReducer(type: string, fn: ReducerFn): void {
+  addReducer<T>(type: string, fn: ReducerFn<T>): void {
     reducers[type] = fn;
   }
 
@@ -388,7 +381,7 @@ export class StateService {
     return value;
   }
 
-  getState(): StateType {
+  getState(): S {
     return this.state.getValue();
   }
 
@@ -399,14 +392,21 @@ export class StateService {
   }
 
   initial(path: string): any {
-    return this.getPathValue(path, initialState);
+    return this.getPathValue(path, this.initialState);
   }
 
-  setInitialState(state: StateType): void {
-    const sessionState = loadState();
-    const haveSession = sessionState && Object.keys(sessionState).length > 0;
-    initialState = haveSession ? sessionState : state;
-    this.dispatch(INIT, initialState);
+  setInitialState(state: S): void {
+    const {sessionStorage} = window; // not available in tests
+
+    try {
+      const json = sessionStorage ? sessionStorage.getItem(STATE_KEY) : null;
+      const sessionState = json ? JSON.parse(json) : null;
+      const haveSession = sessionState && Object.keys(sessionState).length > 0;
+      this.initialState = haveSession ? sessionState : state;
+      this.dispatch(INIT, this.initialState);
+    } catch (e) {
+      handleError(e.message);
+    }
   }
 
   watch(path: string, obj: Object, property: string): Subscription {

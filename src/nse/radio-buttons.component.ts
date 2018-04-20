@@ -39,13 +39,14 @@ export interface TextValue {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class RadioButtonsComponent extends HasChangeDetector implements OnInit {
+export class RadioButtonsComponent<S> extends HasChangeDetector
+  implements OnInit {
   @Input() className = '';
   @Input() list: TextValue[];
   @Input() path = '';
   @Input() value = 0;
 
-  constructor(cd: ChangeDetectorRef, private stateSvc: StateService) {
+  constructor(cd: ChangeDetectorRef, private stateSvc: StateService<S>) {
     super(cd);
   }
 
