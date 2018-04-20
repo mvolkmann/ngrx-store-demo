@@ -1,7 +1,7 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
-import {StoreModule} from '@ngrx/store';
+import {ActionReducerMap, StoreModule} from '@ngrx/store';
 
 import {AppComponent} from './app.component';
 import {metaReducer} from './meta-reducer';
