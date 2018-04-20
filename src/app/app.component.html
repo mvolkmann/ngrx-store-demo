@@ -1,0 +1,38 @@
+<h1>ngrx/store Demo</h1>
+
+<div>
+  <label>Name: </label>
+  <span>{{(user$ | async).name}}</span>
+</div>
+
+<div>
+  <label>New Name: </label>
+  <input #nameInput type="text" />
+  <button (click)="setName(nameInput.value)">Change</button>
+</div>
+
+<div>
+  <label>Color</label>
+  <span>{{(user$ | async).color}}</span>
+</div>
+
+<div>
+  <label>New Color: </label>
+  <nse-input path="user.color"></nse-input>
+</div>
+
+<div>
+  <label>Car Make: </label>
+  <span>{{(car$ | async).make}}</span>
+</div>
+
+<div>
+  <label>New Make: </label>
+  <input #makeInput type="text" />
+  <button (click)="setMake(makeInput.value)">Change</button>
+</div>
+
+<div>
+  <button (click)="special()">Special</button>
+</div>
+
