@@ -9,13 +9,15 @@ import {initialState} from './state';
 import {NseModule} from '../nse/nse.module';
 import {StateService} from '../nse/state.service';
 
+const arm = {} as ActionReducerMap<Object, any>;
+
 @NgModule({
   declarations: [AppComponent],
   imports: [
     BrowserModule,
     FormsModule,
     NseModule,
-    StoreModule.forRoot({}, {metaReducers: [metaReducer]})
+    StoreModule.forRoot(arm, {metaReducers: [metaReducer]})
   ],
   providers: [StateService],
   bootstrap: [AppComponent]
