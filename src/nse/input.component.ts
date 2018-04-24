@@ -45,7 +45,7 @@ export class InputComponent<S> extends HasChangeDetector implements OnInit {
     }
   }
 
-  onChange(event) {
+  onChange(event: any) {
     const {checked, value} = event.target;
     const {path, type} = this;
 
@@ -66,7 +66,7 @@ export class InputComponent<S> extends HasChangeDetector implements OnInit {
     //if (onChange) onChange(event);
   }
 
-  onKeyPress(event) {
+  onKeyPress(event: any) {
     if (event.key === 'Enter') this.enter.emit();
   }
 }

@@ -3,8 +3,7 @@ import {
   ChangeDetectorRef,
   Component,
   Input,
-  OnInit,
-  Output
+  OnInit
 } from '@angular/core';
 
 import {HasChangeDetector, StateService} from './state.service';
@@ -54,11 +53,11 @@ export class RadioButtonsComponent<S> extends HasChangeDetector
     this.stateSvc.watch(this.path, this, 'value');
   }
 
-  getName(index) {
+  getName(index: number) {
     return 'rb' + (index + 1);
   }
 
-  onChange(event) {
+  onChange(event: any) {
     // We don't need to use a CaptureType here because the
     // RadioButtons component should only used with boolean properties.
     this.stateSvc.dispatchSet(this.path, null, event.target.value);

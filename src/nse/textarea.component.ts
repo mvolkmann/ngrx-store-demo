@@ -6,7 +6,6 @@ import {
   OnInit,
   Output
 } from '@angular/core';
-import {Selector} from '@ngrx/store';
 
 import {HasChangeDetector, StateService} from './state.service';
 
@@ -34,7 +33,7 @@ export class TextAreaComponent<S> extends HasChangeDetector implements OnInit {
     this.stateSvc.watch(this.path, this, 'value');
   }
 
-  onChange(event) {
+  onChange(event: any) {
     // We don't need to use a CaptureType here because the
     // TextArea component should only used with string properties.
     this.stateSvc.dispatchSet(this.path, '', event.target.value);
