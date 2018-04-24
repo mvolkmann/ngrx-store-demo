@@ -11,8 +11,6 @@ import {BrowserModule} from '@angular/platform-browser';
 import {ActionReducerMap, StoreModule} from '@ngrx/store';
 import {StoreDevtoolsModule} from '@ngrx/store-devtools';
 
-import {environment} from '../environments/environment';
-
 import {CheckboxesComponent} from './checkboxes.component';
 import {InputComponent} from './input.component';
 import {RadioButtonsComponent} from './radio-buttons.component';
@@ -26,8 +24,9 @@ const store = StoreModule.forRoot(reducerMap, {
   metaReducers
 });
 
+//import {environment} from '../environments/environment';
 const storeDevTools = StoreDevtoolsModule.instrument({
-  logOnly: environment.production,
+  //logOnly: environment.production,
   maxAge: 25 // # of states to retain
 });
 
@@ -39,12 +38,7 @@ const storeDevTools = StoreDevtoolsModule.instrument({
     SelectComponent,
     TextAreaComponent
   ],
-  imports: [
-    BrowserModule,
-    FormsModule,
-    store,
-    storeDevTools
-  ],
+  imports: [BrowserModule, FormsModule, store, storeDevTools],
   exports: [
     CheckboxesComponent,
     InputComponent,

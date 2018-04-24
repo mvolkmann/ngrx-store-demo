@@ -1,6 +1,6 @@
 import {ChangeDetectorRef, Injectable} from '@angular/core';
 import {State, Store} from '@ngrx/store';
-import {throttle} from 'lodash/function';
+import * as throttle from 'lodash/throttle';
 import {Observable} from 'rxjs/Observable';
 import {Subscription} from 'rxjs/Subscription';
 
