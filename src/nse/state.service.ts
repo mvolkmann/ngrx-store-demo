@@ -4,8 +4,6 @@ import {throttle} from 'lodash/function';
 import {Observable} from 'rxjs/Observable';
 import {Subscription} from 'rxjs/Subscription';
 
-import {AppState} from '../app/state';
-
 interface Action {
   type: string;
   payload?: any;
@@ -24,7 +22,7 @@ const STATE_KEY = 'reduxState';
 const reducers = {
   '@ngrx/store/init': (): void => null,
   '@@redux/INIT': (): void => null,
-  '@@async': (state: Object, payload: any) => payload,
+  '@@async': (state: Object, payload: any): any => payload,
   [DELETE]: deletePath,
   [FILTER]: filterPath,
   [INIT]: initState,
