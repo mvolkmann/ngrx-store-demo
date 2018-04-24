@@ -3,9 +3,7 @@ import {
   ChangeDetectorRef,
   Component,
   Input,
-  NgModule,
-  OnInit,
-  Output
+  OnInit
 } from '@angular/core';
 
 import {StateService} from './state.service';
@@ -41,27 +39,27 @@ export interface TextPath {
 export class CheckboxesComponent<S> implements OnInit {
   @Input() className = '';
   @Input() list: TextPath[];
-  @Input() values = [];
+  @Input() values: boolean[] = [];
 
   constructor(
     private cd: ChangeDetectorRef,
     private stateSvc: StateService<S>
   ) {}
 
-  ngOnInit() {
-    this.list.forEach((obj, index) =>
-      this.stateSvc.getObservable(obj.path).subscribe(value => {
+  ngOnInit(): void {
+    this.list.forEach((obj: TextPath, index: number) =>
+      this.stateSvc.getObservable(obj.path).subscribe((value: boolean) => {
         this.values[index] = value;
         this.cd.markForCheck();
       })
     );
   }
 
-  getName(index) {
+  getName(index: number): string {
     return 'rb' + (index + 1);
   }
 
-  onChange(event, path) {
+  onChange(event: any, path: string): void {
     // We don't need to use a CaptureType here because the
     // Checkboxes component should only used with boolean properties.
     this.stateSvc.dispatchSet(path, null, event.target.checked);
